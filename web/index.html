@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17251d">
+  <title>AMB82-MINI Voice LED Control</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand-mark" href="#top" aria-label="AMB82-MINI home">A<span>/</span>82</a>
+    <div class="topbar-copy">
+      <p class="eyebrow">VOICE + HARDWARE DEMO</p>
+      <h1 id="top">AMB82-MINI <span>Voice LED Control</span></h1>
+    </div>
+    <div class="live-mark"><span class="live-dot"></span> LOCAL CONTROL</div>
+  </header>
+
+  <main>
+    <section class="connection-band" aria-labelledby="connection-title">
+      <div class="section-label">
+        <span class="index">01</span>
+        <div>
+          <p class="eyebrow">DEVICE LINK</p>
+          <h2 id="connection-title">裝置連線</h2>
+        </div>
+      </div>
+      <form id="connection-form" class="connection-form">
+        <label for="device-url">AMB82-MINI IP / URL</label>
+        <div class="url-entry">
+          <span class="url-prefix">HTTP</span>
+          <input id="device-url" name="device-url" type="url" value="http://192.168.1.109" spellcheck="false" autocomplete="url" required>
+          <button class="button button-light" type="submit"><span class="button-symbol">↗</span>連線 / 測試</button>
+        </div>
+      </form>
+      <div id="connection-status" class="connection-state state-idle" role="status" aria-live="polite">
+        <span class="status-led"></span>
+        <span id="connection-label">未連線</span>
+      </div>
+    </section>
+
+    <section class="device-readout" aria-labelledby="readout-title">
+      <div class="readout-heading">
+        <div>
+          <p class="eyebrow">LIVE DEVICE RESPONSE</p>
+          <h2 id="readout-title">AMB82 回報狀態</h2>
+        </div>
+        <span class="readout-note">讀取自 <code>GET /status</code></span>
+      </div>
+      <div class="led-readouts">
+        <div class="led-readout" data-led="blue">
+          <span class="led-lamp lamp-blue" aria-hidden="true"></span>
+          <div class="led-name"><span>左側 LED</span><small>BLUE</small></div>
+          <strong id="blue-state" class="led-value unknown">未知</strong>
+        </div>
+        <div class="led-readout" data-led="green">
+          <span class="led-lamp lamp-green" aria-hidden="true"></span>
+          <div class="led-name"><span>右側 LED</span><small>GREEN</small></div>
+          <strong id="green-state" class="led-value unknown">未知</strong>
+        </div>
+        <button id="refresh-status" class="icon-button" type="button" title="重新讀取裝置狀態" aria-label="重新讀取裝置狀態">↻</button>
+      </div>
+    </section>
+
+    <div class="work-grid">
+      <section class="voice-panel" aria-labelledby="voice-title">
+        <div class="panel-heading">
+          <div class="section-label compact">
+            <span class="index">02</span>
+            <div>
+              <p class="eyebrow">BILINGUAL INPUT</p>
+              <h2 id="voice-title">語音控制</h2>
+            </div>
+          </div>
+          <span class="language-chip"><span class="language-pulse"></span>中文 · EN</span>
+        </div>
+
+        <div class="listening-display" aria-live="polite">
+          <span id="listening-indicator" class="listening-indicator"></span>
+          <div>
+            <strong id="listening-label">語音辨識已停止</strong>
+            <span id="language-label">辨識語言由系統輪替</span>
+          </div>
+        </div>
+
+        <div class="voice-actions">
+          <button id="start-listening" class="button button-accent" type="button">
+            <span class="button-symbol" aria-hidden="true">🎤</span>開始語音辨識
+          </button>
+          <button id="stop-listening" class="button button-stop" type="button" disabled>
+            <span class="button-symbol stop-symbol" aria-hidden="true">■</span>停止語音辨識
+          </button>
+        </div>
+        <p id="speech-support-message" class="support-message" hidden></p>
+
+        <div class="result-panel">
+          <p class="eyebrow">LATEST RECOGNITION</p>
+          <dl class="result-list">
+            <div><dt>辨識文字</dt><dd id="recognized-text">尚無辨識結果</dd></div>
+            <div><dt>解析指令</dt><dd id="parsed-command">等待語音輸入</dd></div>
+            <div><dt>執行結果</dt><dd id="execution-result" class="result-neutral">尚未執行</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="manual-panel" aria-labelledby="manual-title">
+        <div class="section-label compact">
+          <span class="index">03</span>
+          <div>
+            <p class="eyebrow">DIRECT COMMAND</p>
+            <h2 id="manual-title">手動控制</h2>
+          </div>
+        </div>
+
+        <div class="manual-controls">
+          <div class="manual-row">
+            <div class="manual-led"><span class="mini-lamp lamp-blue"></span><span>左側 LED</span><small>BLUE</small></div>
+            <div class="button-pair">
+              <button class="button button-on" data-path="/blue/on" data-label="左側 LED ON" type="button">ON</button>
+              <button class="button button-off" data-path="/blue/off" data-label="左側 LED OFF" type="button">OFF</button>
+            </div>
+          </div>
+          <div class="manual-row">
+            <div class="manual-led"><span class="mini-lamp lamp-green"></span><span>右側 LED</span><small>GREEN</small></div>
+            <div class="button-pair">
+              <button class="button button-on" data-path="/green/on" data-label="右側 LED ON" type="button">ON</button>
+              <button class="button button-off" data-path="/green/off" data-label="右側 LED OFF" type="button">OFF</button>
+            </div>
+          </div>
+          <button id="blink-button" class="button button-blink" data-path="/blink" data-label="兩燈同時閃爍三次" type="button">
+            <span class="blink-symbol" aria-hidden="true">✳</span>兩燈閃爍三次
+          </button>
+        </div>
+
+        <div class="activity-line">
+          <span class="activity-bar" aria-hidden="true"></span>
+          <p id="activity-message" role="status" aria-live="polite">等待操作</p>
+        </div>
+      </section>
+    </div>
+
+    <footer class="page-footer">
+      <span>AMB82-MINI · HTTP :80</span>
+      <span>VOICE RECOGNITION REQUIRES A SUPPORTED BROWSER</span>
+    </footer>
+  </main>
+</body>
+</html>
